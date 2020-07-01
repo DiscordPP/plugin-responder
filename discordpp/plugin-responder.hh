@@ -31,7 +31,7 @@ namespace discordpp{
 			);
 		}
 
-		virtual void respond(const std::string& command, const std::function<void(json)> handler){
+		virtual void respond(const std::string& command, const handleEvent handler){
 			handlers.insert(
 					{
 							"MESSAGE_CREATE",
