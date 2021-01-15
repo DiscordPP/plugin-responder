@@ -11,7 +11,7 @@
 
 namespace discordpp {
 template <class BASE> class PluginResponder : public BASE, virtual BotStruct {
-    snowflake id_;
+    Snowflake id_;
 
   public:
     std::string prefix = "!";
