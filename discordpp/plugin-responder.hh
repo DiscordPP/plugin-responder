@@ -46,10 +46,11 @@ template <class BASE> class PluginResponder : public BASE, virtual BotStruct {
                          const std::string response) {
         respond(command, [this, response](json msg) {
             // Echo the created message
-            BASE::call("POST",
-                       "/channels/" + msg["channel_id"].get<std::string>() +
-                           "/messages",
-                       json({{"content", response}}));
+            BASE::callJson()
+                ->method("POST")
+                ->target("/channels/" + msg["channel_id"].get<std::string>() +
+                         "/messages")
+                ->payload({{"content", response}});
         });
     }
 };
