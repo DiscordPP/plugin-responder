@@ -32,8 +32,8 @@ template <class BASE> class PluginResponder : public BASE, virtual BotStruct {
         handlers.insert(
             {"MESSAGE_CREATE", [this, command, handler](json msg) {
                  // Check for self and prefixed command
-                 if (boost::lexical_cast<snowflake>(
-                         msg["author"]["id"].get<std::string>()) != id_ &&
+                 if (get_snowflake(
+                         msg["author"]["id"]) != id_ &&
                      msg["content"].get<std::string>().rfind(prefix + command,
                                                              0) == 0) {
                      // Run the response
@@ -43,14 +43,15 @@ template <class BASE> class PluginResponder : public BASE, virtual BotStruct {
     }
 
     virtual void respond(const std::string &command,
-                         const std::string response) {
+                         const std::string &response) {
         respond(command, [this, response](json msg) {
             // Echo the created message
             BASE::callJson()
                 ->method("POST")
                 ->target("/channels/" + msg["channel_id"].get<std::string>() +
                          "/messages")
-                ->payload({{"content", response}});
+                ->payload({{"content", response}})
+                ->run();
         });
     }
 };
