@@ -11,7 +11,7 @@
 
 namespace discordpp {
 template <class BASE> class PluginResponder : public BASE, virtual BotStruct {
-    snowflake id_;
+    Snowflake id_;
 
   public:
     std::string prefix = "!";
@@ -22,24 +22,21 @@ template <class BASE> class PluginResponder : public BASE, virtual BotStruct {
         BASE::initBot(apiVersionIn, tokenIn, aiocIn);
 
         handlers.insert({"READY", [this](json data) {
-                             id_ = boost::lexical_cast<snowflake>(
-                                 data["user"]["id"].get<std::string>());
+                             id_ = data["user"]["id"].get<Snowflake>();
                          }});
     }
 
     virtual void respond(const std::string &command,
                          const handleEvent handler) {
-        handlers.insert(
-            {"MESSAGE_CREATE", [this, command, handler](json msg) {
-                 // Check for self and prefixed command
-                 if (get_snowflake(
-                         msg["author"]["id"]) != id_ &&
-                     msg["content"].get<std::string>().rfind(prefix + command,
-                                                             0) == 0) {
-                     // Run the response
-                     handler(msg);
-                 }
-             }});
+        handlers.insert({"MESSAGE_CREATE", [this, command, handler](json msg) {
+                             // Check for self and prefixed command
+                             if (msg["author"]["id"].get<Snowflake>() != id_ &&
+                                 msg["content"].get<std::string>().rfind(
+                                     prefix + command, 0) == 0) {
+                                 // Run the response
+                                 handler(msg);
+                             }
+                         }});
     }
 
     virtual void respond(const std::string &command,
