@@ -7,8 +7,6 @@
 
 #include <discordpp/plugin-overload.hh>
 
-#include <boost/lexical_cast.hpp>
-
 namespace discordpp {
 template <class BASE> class PluginResponder : public BASE, virtual BotStruct {
     Snowflake id_;
@@ -18,7 +16,7 @@ template <class BASE> class PluginResponder : public BASE, virtual BotStruct {
 
     virtual void
     initBot(unsigned int apiVersionIn, const std::string &tokenIn,
-            std::shared_ptr<boost::asio::io_context> aiocIn) override {
+            std::shared_ptr<asio::io_context> aiocIn) override {
         BASE::initBot(apiVersionIn, tokenIn, aiocIn);
 
         handlers.insert({"READY", [this](json data) {
