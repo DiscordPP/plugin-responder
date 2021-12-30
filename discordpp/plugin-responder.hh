@@ -9,6 +9,7 @@
 
 namespace discordpp {
 template <class BASE> class PluginResponder : public BASE, virtual BotStruct {
+  protected:
     Snowflake id_;
 
   public:
